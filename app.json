@@ -1,4 +1,11 @@
 {
   "displayName": "Velký bratr",
-  "name": "velkybratr"
+  "name": "velkybratr",
+  "ios": {
+    "bundleIdentifier": "cz.velky-bratr.app",
+    "associatedDomains": [
+      "webcredentials:velky-bratr.cz",
+      "webcredentials:www.velky-bratr.cz"
+    ]
+  }
 }

@@ -1,14 +1,20 @@
 {
-  "name": "empty-project-template",
+  "name": "velkybratr",
   "private": true,
   "scripts": {
     "start": "react-native start",
     "android": "react-native run-android",
-    "ios": "react-native run-ios"
+    "ios": "react-native run-ios",
+    "link": "react-native link"
   },
   "dependencies": {
     "react": "16.6.3",
-    "react-native": "0.57.8"
+    "react-native": "0.57.8",
+    "react-native-background-fetch": "2.0.x",
+    "react-native-background-task": "^0.2.1",
+    "react-native-maps": "^0.23.0",
+    "react-native-status-bar-height": "^2.2.0",
+    "react-router-native": "^4.3.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"
