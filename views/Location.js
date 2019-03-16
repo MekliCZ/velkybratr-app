@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import {AsyncStorage, Button, StyleSheet, Text, View, Switch} from "react-native";
 import Header from "../components/Header";
 import MapView, {Marker} from 'react-native-maps';
+import PointMyself from '../assets/point_myself.png';
+import PointNone from '../assets/point_none.png';
+import PointParty from '../assets/point_party.png';
+import PointResistance from '../assets/point_resistance.png';
 
 export default class Location extends Component {
 	constructor(props) {
@@ -9,7 +13,8 @@ export default class Location extends Component {
 
 		this.state = {
 			requestedLocationPermission: 'false',
-			mapPoints: [],
+			mapCitizens: [],
+			mapSabotages: [],
 		}
 	}
 
@@ -53,7 +58,26 @@ export default class Location extends Component {
 						.then((result) => {
 							if (typeof result.response !== 'undefined') {
 								this.setState({
-									mapPoints: result.response,
+									mapCitizens: result.response,
+								});
+								console.log(result.response);
+							}
+						});
+
+					fetch('https://velky-bratr.cz/api/map/getNearSabotages/', {
+						credentials: 'same-origin',
+						method: 'GET',
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+						},
+					})
+						.then((result) => {
+							return result.json();
+						})
+						.then((result) => {
+							if (typeof result.response !== 'undefined') {
+								this.setState({
+									mapSabotages: result.response,
 								});
 							}
 						});
@@ -77,6 +101,38 @@ export default class Location extends Component {
 		});
 	};
 
+	static getPointImageByType(type) {
+		switch(type) {
+			case 'myself':
+				return PointMyself;
+			case 'party':
+				return PointParty;
+			case 'resistance':
+				return PointResistance;
+			default:
+				return PointNone;
+		}
+	}
+
+	static getPointDescriptionByType(type, timestamp) {
+		const timestampDate = new Date(parseInt(timestamp) * 1000);
+		const currentDate = new Date();
+		const minutes = Math.round((((currentDate - timestampDate) % 86400000) % 3600000) / 60000);
+
+		switch(type) {
+			case 'myself':
+				return `Moje poloha, před ${minutes} min`;
+			case 'none':
+				return `Hráč, před ${minutes} min`;
+			case 'party':
+				return `Straník, před ${minutes} min`;
+			case 'resistance':
+				return `Odbojář, před ${minutes} min`;
+			default:
+				return `__${type}__, před ${minutes} min`;
+		}
+	}
+
 	render() {
 		return (
 			<View style={styles.container}>
@@ -98,15 +154,30 @@ export default class Location extends Component {
 								}}
 							>
 								{
-									this.state.mapPoints.map((item) => {
+									this.state.mapCitizens.map((item) => {
+										console.log('../assets/point_' + item.marker + '.png');
 										return <Marker
 											coordinate={{
 												latitude: parseFloat(item.latitude),
 												longitude: parseFloat(item.longitude),
 											}}
-											image={require('../assets/point_myself.png')}
-											title={'Moje poloha'}
-											key={'my_'}
+											image={Location.getPointImageByType(item.marker)}
+											title={Location.getPointDescriptionByType(item.marker, item.time)}
+											key={item.id}
+										/>;
+									})
+								}
+								{
+									this.state.mapSabotages.map((item) => {
+										console.log('../assets/point_' + item.marker + '.png');
+										return <Marker
+											coordinate={{
+												latitude: parseFloat(item.latitude),
+												longitude: parseFloat(item.longitude),
+											}}
+											image={Location.getPointImageByType(item.marker)}
+											title={Location.getPointDescriptionByType(item.marker, item.time)}
+											key={item.id}
 										/>;
 									})
 								}
