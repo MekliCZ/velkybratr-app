@@ -6,6 +6,8 @@ import PointMyself from '../assets/point_myself.png';
 import PointNone from '../assets/point_none.png';
 import PointParty from '../assets/point_party.png';
 import PointResistance from '../assets/point_resistance.png';
+import PointSabotageParty from '../assets/point_sabotage_party.png';
+import PointSabotageResistance from '../assets/point_sabotage_resistance.png';
 
 export default class Location extends Component {
 	constructor(props) {
@@ -109,6 +111,10 @@ export default class Location extends Component {
 				return PointParty;
 			case 'resistance':
 				return PointResistance;
+			case 'sabotage_party':
+				return PointSabotageParty;
+			case 'sabotage_resistance':
+				return PointSabotageResistance;
 			default:
 				return PointNone;
 		}
@@ -128,6 +134,10 @@ export default class Location extends Component {
 				return `Straník, před ${minutes} min`;
 			case 'resistance':
 				return `Odbojář, před ${minutes} min`;
+			case 'sabotage_party':
+				return `Sabotáž podporující stranu, před ${minutes} min`;
+			case 'sabotage_resistance':
+				return `Sabotáž podporující odboj, před ${minutes} min`;
 			default:
 				return `__${type}__, před ${minutes} min`;
 		}
@@ -177,7 +187,7 @@ export default class Location extends Component {
 											}}
 											image={Location.getPointImageByType(item.marker)}
 											title={Location.getPointDescriptionByType(item.marker, item.time)}
-											key={item.id}
+											key={item.info_id}
 										/>;
 									})
 								}

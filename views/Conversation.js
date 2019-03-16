@@ -4,14 +4,10 @@ import Header from "../components/Header";
 
 export default class Conversation extends Component {
     state = {
-        requestedLocationPermission: 'false',
+        conversations: [],
     };
 
     componentDidMount = () => {
-
-    };
-
-    handleAutoLocationAllow = () => {
 
     };
 
